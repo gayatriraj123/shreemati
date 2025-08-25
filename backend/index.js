@@ -1,4 +1,4 @@
-const port = 4000;
+const port = process.env.PORT || 4000; // Use Render's port or default to 4000
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -13,7 +13,7 @@ app.use(cors());
 
 //Database connection with mongoDB
 // mongoose.connect("mongodb+srv://gayatrirajguru2002:FMYGOEGby1po1G9z@cluster0.3bdvj.mongodb.net/");
-mongoose.connect("mongodb+srv://gayatrirajguru2002:g7387568749@cluster0.dumq7yj.mongodb.net/e-commerce");        //backup    FMYGOEGby1po1G9z
+mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://gayatrirajguru2002:g7387568749@cluster0.dumq7yj.mongodb.net/e-commerce");
 
 
 //api creation
@@ -40,7 +40,7 @@ app.use('/images',express.static('upload/images'))
 app.post("/upload",upload.single('product'),(req,res)=>{
     res.json({
         success:1,
-        image_url:`http://localhost:${port}/images/${req.file.filename}`
+        image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
 })
 
@@ -278,3 +278,28 @@ app.listen(port,(error)=>{
         console.log("Error :"+error);
     }
 })
+
+
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve frontend build
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  });
+
+  // Serve admin build on /admin route
+  app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
+  app.get('/admin*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../admin/dist/index.html'));
+  });
+}
+
+app.listen(port, (error) => {
+  if (!error) {
+    console.log("Server Running on port " + port);
+  } else {
+    console.log("Error :" + error);
+  }
+});

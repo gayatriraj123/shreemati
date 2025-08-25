@@ -1,0 +1,16 @@
+{
+  "name": "ecommerce-fullstack",
+  "version": "1.0.0",
+  "description": "Fullstack E-commerce Application",
+  "scripts": {
+    "build": "npm install && cd admin && npm install && npm run build && cd ../frontend && npm install && npm run build",
+    "start": "cd backend && npm start",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" \"cd admin && npm run dev\""
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

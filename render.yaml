@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ecommerce-fullstack
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://gayatrirajguru2002:g7387568749@cluster0.dumq7yj.mongodb.net/e-commerce
+      - key: JWT_SECRET
+        generateValue: true
+    autoDeploy: true
