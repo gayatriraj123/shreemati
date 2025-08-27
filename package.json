@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Fullstack E-commerce Application",
   "scripts": {
-    "build": "npm install && cd admin && npm install && npm run build && cd ../frontend && npm install && npm run build",
+    "build:admin": "cd admin && npm install && npm run build",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build": "npm run build:admin && npm run build:frontend",
     "start": "cd backend && npm start",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" \"cd admin && npm run dev\""
   },
