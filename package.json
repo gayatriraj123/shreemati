@@ -5,7 +5,7 @@
   "scripts": {
     "build:admin": "cd admin && npm install && npm run build",
     "build:frontend": "cd frontend && npm install && npm run build",
-    "build": "npm run build:admin && npm run build:frontend",
+    "build": "npm install && cd admin && npm install --include=dev && npm run build && cd ../frontend && npm install && npm run build",
     "start": "cd backend && npm start",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" \"cd admin && npm run dev\""
   },
