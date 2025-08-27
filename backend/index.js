@@ -1,4 +1,4 @@
-const port = process.env.PORT || 4000; // Use Render's port or default to 4000
+const port = process.env.PORT || 3000; // Use Render's port or default to 4000
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -269,15 +269,15 @@ app.post('/getcart',fetchUser,async(req,res)=>{
     res.json(userData.cartData);
 })
 
-app.listen(port,(error)=>{
-    if (!error) {
-        console.log("Server Running on port "+port);
+// app.listen(port,(error)=>{
+//     if (!error) {
+//         console.log("Server Running on port "+port);
         
-    }
-    else{
-        console.log("Error :"+error);
-    }
-})
+//     }
+//     else{
+//         console.log("Error :"+error);
+//     }
+// })
 
 
 
