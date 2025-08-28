@@ -20,9 +20,9 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://gayatrirajguru2002:g7
 
 
 
-app.get("/",(req,res)=>{
-    res.send("Experss App is Running");
-})
+// app.get("/",(req,res)=>{
+//     res.send("Experss App is Running");
+// })
 
 //Image storage ingine
 
