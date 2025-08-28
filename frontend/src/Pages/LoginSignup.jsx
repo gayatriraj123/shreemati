@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
 
+
+const API_URL = process.env.REACT_APP_API_URL;
 const LoginSignup = () => {
 
-  const API_URL = process.env.REACT_APP_API_URL;
   const [state,setState]= useState("Login");
   const [formData,setFormData] = useState({
     username:"",
