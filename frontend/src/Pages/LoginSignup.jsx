@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
 
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 const LoginSignup = () => {
 
   const [state,setState]= useState("Login");
