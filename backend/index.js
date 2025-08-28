@@ -291,7 +291,7 @@ if (process.env.NODE_ENV === 'development') {
   
   // Enable CORS for local development
   app.use(cors({
-    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://localhost:5173'],
+    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://localhost:5173', 'https://shreemati.onrender.com'],
     credentials: true
   }));
   

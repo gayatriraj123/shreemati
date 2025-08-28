@@ -17,6 +17,7 @@ const LoginSignup = () => {
 //login function
   const login = async ()=>{
     console.log("Login Function Executed",formData);
+    console.log("API URL being called:", `${API_URL}/login`);
     let responseData;
     await fetch(`${API_URL}/login`,{
       method:'POST',
@@ -24,14 +25,17 @@ const LoginSignup = () => {
         Accept:'appliaction/form-data',
         'Content-Type':'application/json',
       },
+      
       body:JSON.stringify(formData),
     }).then((response)=> response.json()).then((data)=> responseData=data)
-
+    console.log("Login api are ",API_URL);
+    
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
 
        // Show success message
       alert('Login successful! Welcome to our store! 🎉');
+      
 
       window.location.replace("/");                   //after completing the user authentication or login then came to the home page
     }
@@ -57,6 +61,7 @@ const LoginSignup = () => {
 
        // Show success message
       alert('Signup successful! Welcome to our store! 🎉');
+      console.log("signup api are ",API_URL);
 
       window.location.replace("/");                   //after completing the user authentication or login then came to the home page
     }
