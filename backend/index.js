@@ -1,4 +1,4 @@
-const port = process.env.PORT || 3000; // Use Render's port or default to 4000
+const port = process.env.PORT || 4000; // Use Render's port or default to 4000
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -281,19 +281,41 @@ app.post('/getcart',fetchUser,async(req,res)=>{
 
 
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
+// Serve static files in development
+if (process.env.NODE_ENV === 'development') {
+  console.log('Development mode: Serving frontend and admin from local servers');
+  
+  // Enable CORS for local development
+  app.use(cors({
+    origin: ['http://localhost:4000', 'http://localhost:3000', 'http://localhost:5173'],
+    credentials: true
+  }));
+  
+} else {
+  // Production: Serve built files
+  console.log('Production mode: Serving built files');
+  
   // Serve frontend build
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-  });
+  const frontendPath = path.join(__dirname, '../frontend/build');
+  if (require('fs').existsSync(frontendPath)) {
+    app.use(express.static(frontendPath));
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(frontendPath, 'index.html'));
+    });
+  } else {
+    console.log('Frontend build not found at:', frontendPath);
+  }
 
   // Serve admin build on /admin route
-  app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
-  app.get('/admin*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../admin/dist/index.html'));
-  });
+  const adminPath = path.join(__dirname, '../admin/dist');
+  if (require('fs').existsSync(adminPath)) {
+    app.use('/admin', express.static(adminPath));
+    app.get('/admin*', (req, res) => {
+      res.sendFile(path.join(adminPath, 'index.html'));
+    });
+  } else {
+    console.log('Admin build not found at:', adminPath);
+  }
 }
 
 app.listen(port, (error) => {
