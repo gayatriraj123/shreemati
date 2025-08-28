@@ -17,7 +17,9 @@ const LoginSignup = () => {
 //login function
   const login = async ()=>{
     console.log("Login Function Executed",formData);
-    console.log("API URL being called:", `${API_URL}/login`);
+    // Add this at the top of your component to see the API_URL value:
+    console.log("Current API_URL:", process.env.REACT_APP_API_URL || 'http://localhost:4000');
+    console.log("Final API_URL:", API_URL);
     let responseData;
     await fetch(`${API_URL}/login`,{
       method:'POST',
