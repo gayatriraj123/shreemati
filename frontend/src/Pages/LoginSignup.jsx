@@ -3,7 +3,7 @@ import './CSS/LoginSignup.css'
 
 const LoginSignup = () => {
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const API_URL = process.env.REACT_APP_API_URL;
   const [state,setState]= useState("Login");
   const [formData,setFormData] = useState({
     username:"",
