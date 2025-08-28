@@ -281,6 +281,10 @@ app.post('/getcart',fetchUser,async(req,res)=>{
 
 
 
+// ... all your API routes first ...
+
+// ====== PUT ALL YOUR API ROUTES ABOVE THIS LINE ======
+
 // Serve static files in development
 if (process.env.NODE_ENV === 'development') {
   console.log('Development mode: Serving frontend and admin from local servers');
@@ -292,12 +296,13 @@ if (process.env.NODE_ENV === 'development') {
   }));
   
 } else {
-  // Production: Serve built files
+  // Production: Serve built files - BUT ONLY FOR NON-API ROUTES
   console.log('Production mode: Serving built files');
   
-  // Serve frontend build
+  // Serve frontend build - BUT ONLY FOR NON-API ROUTES
   const frontendPath = path.join(__dirname, '../frontend/build');
   if (require('fs').existsSync(frontendPath)) {
+    // Serve static files for non-API routes
     app.use(express.static(frontendPath));
     app.get('/', (req, res) => {
       res.sendFile(path.join(frontendPath, 'index.html'));
@@ -306,7 +311,7 @@ if (process.env.NODE_ENV === 'development') {
     console.log('Frontend build not found at:', frontendPath);
   }
 
-  // Serve admin build on /admin route
+  // Serve admin build on /admin route - BUT ONLY FOR NON-API ROUTES
   const adminPath = path.join(__dirname, '../admin/dist');
   if (require('fs').existsSync(adminPath)) {
     app.use('/admin', express.static(adminPath));
@@ -318,6 +323,7 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
+// ====== KEEP app.listen AT THE VERY END ======
 app.listen(port, (error) => {
   if (!error) {
     console.log("Server Running on port " + port);

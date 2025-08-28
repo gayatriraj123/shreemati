@@ -29,10 +29,14 @@ const LoginSignup = () => {
 
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
+
+       // Show success message
+      alert('Login successful! Welcome to our store! 🎉');
+
       window.location.replace("/");                   //after completing the user authentication or login then came to the home page
     }
     else{
-      alert(responseData.error)
+      alert(responseData.error || 'Login failed. Please try again.')
     }
   }
   //signin function
@@ -50,10 +54,14 @@ const LoginSignup = () => {
 
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
+
+       // Show success message
+      alert('Signup successful! Welcome to our store! 🎉');
+
       window.location.replace("/");                   //after completing the user authentication or login then came to the home page
     }
     else{
-      alert(responseData.error)
+      alert(responseData.error || 'Signup failed. Please try again.')
     }
   }
 
