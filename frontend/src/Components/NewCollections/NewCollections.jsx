@@ -3,8 +3,8 @@ import './NewCollections.css'
 import new_collection from '../Assets/new_collections'
 import Item from '../Item/Item'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 const NewCollections = () => {
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const [new_collection,setNew_collection] = useState([]);
 
   useEffect(()=>{

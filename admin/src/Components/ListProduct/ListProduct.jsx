@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './ListProduct.css'
 import cross_icon from '../../assets/cross_icon.png'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 const ListProduct = () => {
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [allproducts,setAllProducts] = useState([]);
     const fetchInfo = async ()=>{
       await fetch(`${API_URL}/allproducts`)

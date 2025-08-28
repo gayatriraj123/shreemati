@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import './AddProduct.css'
 import upload_area from '../../assets/upload_area.svg'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 const AddProduct = () => {
 
-    const API_URL = process.env.REACT_APP_API_URL;
     const [image,setImage] = useState(false);
     const [productDetails,setProductDetails] = useState({
         name:"",

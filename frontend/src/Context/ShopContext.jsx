@@ -12,9 +12,9 @@ const getDefaultCart = () =>{
     return cart;
 }
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 const ShopContextProvider = (props) =>{
 
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [all_product,setAll_Product] = useState([]);
     const [CartItems, setCartItems] = useState(getDefaultCart());
 
