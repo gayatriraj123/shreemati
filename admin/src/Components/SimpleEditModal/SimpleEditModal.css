@@ -1,0 +1,98 @@
+.simple-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.simple-edit-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+}
+
+.simple-edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.simple-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.simple-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.simple-edit-field label {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.simple-edit-field input,
+.simple-edit-field select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.simple-edit-row {
+    display: flex;
+    gap: 15px;
+}
+
+.simple-edit-row .simple-edit-field {
+    flex: 1;
+}
+
+.simple-edit-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    padding: 10px 20px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.update-btn {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.update-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}

@@ -81,34 +81,71 @@ const Product = mongoose.model("Product",{
     },
 })
 
-app.post('/addproduct',async(req,res)=>{
-    let products = await Product.find({});
-    let id;
-    if(products.length>0)
-    {
-        let last_product_array = products.slice(-1);
-        let last_product = last_product_array[0];
-        id = last_product.id+1;
+app.post('/addproduct', async (req, res) => {
+    try {
+        const { id, name, image, category, new_price, old_price } = req.body;
+        
+        // If ID is provided, it's an UPDATE operation
+        if (id) {
+            console.log('Updating product:', { id, name, new_price, old_price, category });
+            
+            const updatedProduct = await Product.findOneAndUpdate(
+                { id: parseInt(id) },
+                {
+                    name: name,
+                    new_price: parseFloat(new_price),
+                    old_price: parseFloat(old_price),
+                    category: category,
+                    ...(image && { image: image }) // Only update image if provided
+                },
+                { new: true }
+            );
+
+            if (!updatedProduct) {
+                return res.status(404).json({ success: false, error: "Product not found" });
+            }
+
+            console.log('Product updated successfully:', updatedProduct);
+            return res.json({
+                success: true,
+                message: "Product updated successfully",
+                product: updatedProduct
+            });
+        }
+        
+        // Otherwise, it's a NEW product (your existing code)
+        console.log('Adding new product');
+        let products = await Product.find({});
+        let newId;
+        if (products.length > 0) {
+            let last_product_array = products.slice(-1);
+            let last_product = last_product_array[0];
+            newId = last_product.id + 1;
+        } else {
+            newId = 1;
+        }
+        
+        const product = new Product({
+            id: newId,
+            name: name,
+            image: image,
+            category: category,
+            new_price: parseFloat(new_price),
+            old_price: parseFloat(old_price),
+        });
+        
+        await product.save();
+        console.log("Saved new product");
+        res.json({
+            success: true,
+            name: name,
+        });
+        
+    } catch (error) {
+        console.error('Add/Update product error:', error);
+        res.status(500).json({ success: false, error: "Failed to process product" });
     }
-    else{
-        id=1;
-    }
-    const product = new Product({
-        id:id,
-        name:req.body.name,
-        image:req.body.image,
-        category:req.body.category,
-        new_price:req.body.new_price,
-        old_price:req.body.old_price,
-    });
-    console.log(product);
-    await product.save();
-    console.log("Saved");
-    res.json({
-        success:true,
-        name:req.body.name,
-    })
-})
+});
 
 //creating api for deleting product
 
@@ -151,6 +188,40 @@ const Users = mongoose.model('Users',{
         default:Date.now,
     }
 })
+
+
+
+// Update product - FIXED
+app.post('/updateproduct', async (req, res) => {
+    try {
+        const { id, name, new_price, old_price, category } = req.body;
+        
+        console.log('Updating product:', { id, name, new_price, old_price, category });
+        
+        const updatedProduct = await Product.findOneAndUpdate(
+            { id: parseInt(id) }, // Convert to number
+            {
+                name: name,
+                new_price: parseFloat(new_price),
+                old_price: parseFloat(old_price),
+                category: category
+            },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ success: false, error: "Product not found" });
+        }
+
+        console.log('Product updated successfully:', updatedProduct);
+        res.json({ success: true, message: "Product updated successfully", product: updatedProduct });
+        
+    } catch (error) {
+        console.error('Update product error:', error);
+        res.status(500).json({ success: false, error: "Failed to update product" });
+    }
+});
+
 
 //creating endpoint for registrating user
 app.post('/signup',async(req,res)=>{
@@ -268,6 +339,113 @@ app.post('/getcart',fetchUser,async(req,res)=>{
     let userData = await Users.findOne({_id:req.user.id});
     res.json(userData.cartData);
 })
+
+// Add this with your other schemas
+const Order = mongoose.model("Order", {
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
+    items: [{
+        productId: Number,
+        name: String,
+        price: Number,
+        quantity: Number,
+        image: String
+    }],
+    totalAmount: Number,
+    paymentMethod: String,
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'completed', 'failed'],
+        default: 'pending'
+    },
+    orderStatus: {
+        type: String,
+        enum: ['processing', 'shipped', 'delivered', 'cancelled'],
+        default: 'processing'
+    },
+    shippingAddress: {
+        name: String,
+        email: String,
+        phone: String,
+        address: String,
+        city: String,
+        state: String,
+        pincode: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+// Create new order
+app.post('/createorder', fetchUser, async (req, res) => {
+    try {
+        const { items, totalAmount, paymentMethod, shippingAddress } = req.body;
+        
+        const order = new Order({
+            userId: req.user.id,
+            items: items,
+            totalAmount: totalAmount,
+            paymentMethod: paymentMethod,
+            shippingAddress: shippingAddress
+        });
+
+        await order.save();
+        res.json({ success: true, orderId: order._id, message: "Order created successfully" });
+        
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to create order" });
+    }
+});
+
+// Update payment status
+app.post('/updatepayment', fetchUser, async (req, res) => {
+    try {
+        const { orderId, paymentStatus, transactionId } = req.body;
+        
+        await Order.findByIdAndUpdate(orderId, {
+            paymentStatus: paymentStatus,
+            ...(transactionId && { transactionId: transactionId })
+        });
+
+        res.json({ success: true, message: "Payment status updated" });
+        
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to update payment" });
+    }
+});
+
+// Clear user's cart
+app.post('/clearcart', fetchUser, async (req, res) => {
+    try {
+        let userData = await Users.findOne({ _id: req.user.id });
+        let emptyCart = {};
+        for (let i = 0; i < 300; i++) {
+            emptyCart[i] = 0;
+        }
+        
+        userData.cartData = emptyCart;
+        await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: emptyCart });
+        
+        res.json({ success: true, message: "Cart cleared successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to clear cart" });
+    }
+});
+
+// Get user's orders
+app.get('/myorders', fetchUser, async (req, res) => {
+    try {
+        const orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
+        res.json({ success: true, orders: orders });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Failed to fetch orders" });
+    }
+});
 
 // app.listen(port,(error)=>{
 //     if (!error) {

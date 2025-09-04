@@ -50,3 +50,33 @@
         height: 60px;
     }
 }
+
+.listproduct-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.listproduct-edit-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.listproduct-edit-icon:hover {
+    opacity: 1;
+}
+
+.listproduct-remove-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.listproduct-remove-icon:hover {
+    opacity: 1;
+}

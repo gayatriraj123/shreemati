@@ -72,6 +72,30 @@ const ShopContextProvider = (props) =>{
         }
     }
 
+    
+    // ADD THIS NEW FUNCTION: clearCart
+    const clearCart = () => {
+        // Clear local cart state
+        setCartItems(getDefaultCart());
+        
+        // Clear cart on server if user is authenticated
+        if (localStorage.getItem('auth-token')) {
+            // You might want to create a backend endpoint to clear the cart
+            // For now, we'll just set all quantities to 0 on the frontend
+            console.log('Cart cleared');
+            
+            // If you have a backend endpoint to clear cart, you can call it here:
+            // fetch(`${API_URL}/clearcart`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'auth-token': `${localStorage.getItem('auth-token')}`,
+            //         'Content-Type': 'application/json',
+            //     },
+            // })
+            // .then(response => response.json())
+            // .then(data => console.log('Server cart cleared:', data));
+        }
+    }
     const getTotalCartAmount = () =>{
         let totalAmount = 0;
         for(const item in CartItems)
@@ -98,7 +122,7 @@ const ShopContextProvider = (props) =>{
         return totalItem;
     }
     
-    const contextValue = { getTotalCartItems, getTotalCartAmount, all_product, CartItems, addToCart, removeFromCart};
+    const contextValue = { getTotalCartItems, getTotalCartAmount, all_product, CartItems, addToCart, removeFromCart, clearCart};
     return (
         <ShopContext.Provider value={contextValue}>
             {props.children}

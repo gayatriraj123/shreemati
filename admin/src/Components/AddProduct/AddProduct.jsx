@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import './AddProduct.css'
 import upload_area from '../../assets/upload_area.svg'
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+// TO THIS (Vite uses import.meta.env):
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const AddProduct = () => {
 
     const [image,setImage] = useState(false);

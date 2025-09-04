@@ -1,10 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import './CartItems.css'
 import { ShopContext } from '../../Context/ShopContext'
 import remove_icon from '../Assets/cart_cross_icon.png'
+import PaymentModal from '../PaymentModal/PaymentModal'
+
 
 const CartItems = () => {
-    const {getTotalCartAmount,all_product, CartItems,removeFromCart} = useContext(ShopContext);
+    const {getTotalCartAmount,all_product, CartItems,removeFromCart, clearCart} = useContext(ShopContext);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+    const handlePaymentSuccess = () => {
+        alert('Payment successful! Your order has been placed. 🎉');
+        clearCart(); // Clear the cart after successful payment
+        setShowPaymentModal(false);
+    };
+
   return (
     <div className='cartitems'>
       <div className='cartitems-format-main'>
@@ -52,7 +62,7 @@ const CartItems = () => {
             <h3>₹{getTotalCartAmount()}</h3>
           </div>
         </div>
-        <button>PROCEED TO CHECKOUT</button>
+        <button onClick={() => setShowPaymentModal(true)}>PROCEED TO CHECKOUT</button>
       </div>
       <div className='cartitems-promocode'>
         <p>If you have a promo code, Enter it here</p>
@@ -62,6 +72,16 @@ const CartItems = () => {
         </div>
       </div>
     </div>
+     {/* Payment Modal */}
+            {showPaymentModal && (
+                <PaymentModal
+                    totalAmount={getTotalCartAmount()}
+                    onClose={() => setShowPaymentModal(false)}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    cartItems={CartItems}
+                    allProducts={all_product}
+                />
+            )}
     </div>
   )
 }
