@@ -38,7 +38,7 @@ const SimpleEditModal = ({ product, onClose, onUpdate }) => {
             const data = await response.json();
             
             if (data.success) {
-                alert("Product updated successfully!");
+                alert("Product updated successfully!!");
                 onUpdate();
                 onClose();
             } else {
